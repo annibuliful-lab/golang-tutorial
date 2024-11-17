@@ -1,5 +1,5 @@
 package hello
 
-func GetHelloService() HelloResponse{
+func GetHelloService() HelloResponse {
 	return HelloResponse{Message: "Hello"}
 }

@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func GetHelloController(w http.ResponseWriter, r *http.Request){
+func GetHelloController(w http.ResponseWriter, r *http.Request) {
 	response := GetHelloService()
 	utils.RespondWithJSON(w, http.StatusOK, response)
 }
