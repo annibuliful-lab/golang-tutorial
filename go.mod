@@ -8,6 +8,10 @@ require (
 )
 
 require (
-	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
+	github.com/graph-gophers/graphql-go v1.5.0
+	github.com/graph-gophers/graphql-transport-ws v0.0.2
 )
+
+require github.com/gorilla/websocket v1.4.1 // indirect

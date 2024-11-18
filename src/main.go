@@ -1,34 +1,29 @@
 package main
 
 import (
-	"backend/src/db"
-	"backend/src/modules/hello"
-	"fmt"
 	"log"
 	"net/http"
+	"os"
 
-	"github.com/joho/godotenv"
+	localGraphql "backend/src/graphql"
+
+	graphql "github.com/graph-gophers/graphql-go"
+	"github.com/graph-gophers/graphql-go/relay"
+	"github.com/graph-gophers/graphql-transport-ws/graphqlws"
 )
 
 func main() {
-	err := godotenv.Load("./.env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 
-	mux := http.NewServeMux()
-	_, dbError := db.GetSQLiteClient("./dev.db")
-	if dbError != nil {
-		panic(dbError)
-	}
-
-	hello.Router(mux)
-
-	port := "8080"
-	fmt.Printf("Server running at http://localhost:%s/\n", port)
-	err = http.ListenAndServe(":"+port, mux)
+	graphqlSchema, err := os.ReadFile("./src/graphql/schema.graphql")
 
 	if err != nil {
-		fmt.Printf("Error starting server: %s\n", err)
+		panic(err)
 	}
+
+	s := string(graphqlSchema)
+	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers()}
+	schema := graphql.MustParseSchema(s, localGraphql.NewResolver(), opts...)
+	graphQLHandler := graphqlws.NewHandlerFunc(schema, &relay.Handler{Schema: schema})
+	http.Handle("/query", graphQLHandler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

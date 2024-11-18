@@ -1,0 +1,31 @@
+schema {
+  subscription: Subscription
+  mutation: Mutation
+  query: Query
+}
+
+type Query {
+  hello: String!
+  getUsers: [User!]!
+  getUserById(id: ID!): User!
+}
+
+type Subscription {
+  onCreatedUserEvent: User!
+}
+
+input CreateUserInput {
+  id: ID!
+  email: String!
+  name: String
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String
+}
